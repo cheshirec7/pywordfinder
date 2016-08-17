@@ -1,0 +1,19 @@
+{% if list_words_list %}
+	{% for word_list in list_words_list %}
+		{% if word_list %}
+			{% set word_len = word_list.0 %}
+			<p>{{ word_len }} Letter Words</p>
+			<div class="wordcontainer">
+			{% for word in word_list %}
+				{% if word and word != word_len %}
+					<div>{{ word }}</div>
+				{% endif %}
+			{% endfor %}
+			</div>
+		{% endif %}
+	{% endfor %}
+{% else %}
+	<p>No words found.</p>
+{% endif %}
+
+<p id="results_footer">Compares: {{total_compares}}. Results: {{ total_found }} in {{ total_time }}s.</p>
