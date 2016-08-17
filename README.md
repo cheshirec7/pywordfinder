@@ -5,9 +5,9 @@ This is a Python web application that runs on [Google's App Engine](https://deve
 
 The main goal was to learn about Python and compare performance vs. other development tools.  
 
-This project shows that Python is at a performance disadvantage compared to Google Go and NodeJS.
+Python performs noticeably worse as compared to Google Go and NodeJS.
 
-See the full project description [here](https://github.com/cheshirec7/phpwordfinder).
+See the full project description [here](https://github.com/cheshirec7/wordfinder).
 
 Uses [Jinja](http://jinja.pocoo.org/).
 
