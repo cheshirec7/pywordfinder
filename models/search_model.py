@@ -7,8 +7,6 @@ from google.appengine.api import memcache
 
 ASCII_a = 97
 ASCII_z = 122
-# most_to_least_common = []int{E, A, R, I, O, T, N, S, L, C, U, D, P, M, H, G, B, F, Y, W, K, V, X, Z, J, Q}
-most_to_least_common = [4, 0, 17, 8, 14, 19, 13, 18, 11, 2, 20, 3, 15, 12, 7, 6, 1, 5, 24, 22, 10, 21, 23, 25, 9, 16]
 	
 class WordLists(ndb.Model):
 	words = ndb.TextProperty()
@@ -52,21 +50,19 @@ class search_model():
 				self.total_cached += 1
 				
 			temp_str = ''
-			for j in range(len(word_list)):
-				ana_key_letter_counts_arr = [0]*26
-				word = word_list[j]
-				
-				for k in range(word_len):
-					ana_key_letter_counts_arr[ord(word[k])-ASCII_a] += 1
-				
-				for k in range(26):
+			for i in range(len(word_list)):
+				local_letter_counts_arr = list(letter_counts_arr)
+				word = word_list[i]
+				for j in range(word_len):
 					self.total_compares += 1
-					if letter_counts_arr[most_to_least_common[k]] - ana_key_letter_counts_arr[most_to_least_common[k]] < 0:
-						word_list[j] = None
+					idx = ord(word[j])-ASCII_a
+					if local_letter_counts_arr[idx] == 0:
+						word_list[i] = None
 						break
-				
+					local_letter_counts_arr[idx] -= 1
+
 				if return_type != 'json':
-					if word_list[j]:
+					if word_list[i]:
 						temp_str += '<div>'+word+'</div>'
 						self.total_found += 1
 						
@@ -103,25 +99,24 @@ class search_model():
 				
 			if word_len > wild_count:
 				temp_str = ''
-				for j in range(len(word_list)):
-					ana_key_letter_counts_arr = [0]*26
-					word = word_list[j]
-					
-					for k in range(word_len):
-						ana_key_letter_counts_arr[ord(word[k])-ASCII_a] += 1
-					
+				for i in range(len(word_list)):
+					local_letter_counts_arr = list(letter_counts_arr)
 					wild_avail = wild_count
-					for k in range(26):
+					word = word_list[i]
+					for j in range(word_len):
 						self.total_compares += 1
-						diff = letter_counts_arr[most_to_least_common[k]] - ana_key_letter_counts_arr[most_to_least_common[k]]
-						if diff < 0:
-							wild_avail += diff
-							if wild_avail < 0:
-								word_list[j] = None
+						idx = ord(word[j])-ASCII_a
+						if local_letter_counts_arr[idx] == 0:
+							if wild_avail == 0:
+								word_list[i] = None
 								break
-					
+							else:
+								wild_avail -= 1
+						else:
+							local_letter_counts_arr[idx] -= 1
+
 					if return_type != 'json':
-						if word_list[j]:
+						if word_list[i]:
 							temp_str += '<div>'+word+'</div>'
 							self.total_found += 1
 										
