@@ -127,7 +127,7 @@
       showSpinner = false;
       $.ajax({
         type: 'GET',
-        url: 'https://phpwordfinder.erictotten.net/define/'+word,
+        url: 'http://phpwordfinder.erictotten.net/define/'+word,
         dataType: 'html'
       }).done(function(data, textStatus, jqXHR) {
         $defModalBody.html(data);
